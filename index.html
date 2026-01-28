@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kavency Super Market - Online Grocery Delivery</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #2e7d32;
@@ -1182,7 +1181,7 @@
                     </div>
                     <span class="action-text">Cart</span>
                 </a>
-                <a href="kavency_admin.html" class="action-btn" target="_blank">
+                <a href="Admin.html" class="action-btn" target="_blank">
                     <div class="action-icon">
                         <i class="fas fa-tachometer-alt"></i>
                     </div>
@@ -1368,7 +1367,7 @@
                     <li><a href="#" onclick="showSection('specials')"><i class="fas fa-chevron-right"></i> Weekly Specials</a></li>
                     <li><a href="#" onclick="showSection('recipes')"><i class="fas fa-chevron-right"></i> Recipes</a></li>
                     <li><a href="#" onclick="showSection('about')"><i class="fas fa-chevron-right"></i> About Us</a></li>
-                    <li><a href="kavency_admin.html" target="_blank"><i class="fas fa-chevron-right"></i> Admin Panel</a></li>
+                    <li><a href="Admin.html" target="_blank"><i class="fas fa-chevron-right"></i> Admin Panel</a></li>
                 </ul>
             </div>
             
@@ -1581,7 +1580,7 @@
                 
                 <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
                     <p style="color: #666; margin-bottom: 10px;">Access Admin Panel</p>
-                    <a href="kavency_admin.html" class="btn btn-secondary" style="width: 100%;" target="_blank">
+                    <a href="Admin.html" class="btn btn-secondary" style="width: 100%;" target="_blank">
                         <i class="fas fa-tachometer-alt"></i> Go to Admin Dashboard
                     </a>
                 </div>
@@ -1650,372 +1649,439 @@
 
         // ==================== DATA LOADING ====================
         function loadProductsFromAdmin() {
-            const adminProducts = JSON.parse(localStorage.getItem('kavency_products'));
-            if (adminProducts && adminProducts.length > 0) {
-                products = adminProducts;
-                displayFeaturedProducts();
-                displaySpecialProducts();
-            } else {
-                // Default products if none in admin
-                products = [
-                    {
-                        id: 'P001',
-                        name: 'Fresh Tomatoes (1kg)',
-                        category: 'cat1',
-                        price: 12.99,
-                        stock: 45,
-                        description: 'Locally grown, ripe tomatoes from Zambian farms. Perfect for salads, sauces, and cooking.',
-                        sku: 'TOM-001',
-                        weight: 1.0,
-                        discount: 0,
-                        featured: 'yes',
-                        images: ['https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
-                    },
-                    {
-                        id: 'P002',
-                        name: 'Chicken Breasts (1kg)',
-                        category: 'cat2',
-                        price: 45.99,
-                        stock: 22,
-                        description: 'Premium skinless, boneless chicken breasts. Fresh and tender, perfect for grilling or baking.',
-                        sku: 'CHK-001',
-                        weight: 1.0,
-                        discount: 0,
-                        featured: 'yes',
-                        images: ['https://images.unsplash.com/photo-1621996346565-e3dbc353d2a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
-                    },
-                    {
-                        id: 'P003',
-                        name: 'Fresh Milk (2L)',
-                        category: 'cat3',
-                        price: 18.50,
-                        stock: 3,
-                        description: 'Full cream pasteurized milk. Rich in calcium and vitamins, perfect for your daily needs.',
-                        sku: 'MLK-001',
-                        weight: 2.0,
-                        discount: 0,
-                        featured: 'no',
-                        images: ['https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
-                    },
-                    {
-                        id: 'P004',
-                        name: 'Brown Bread',
-                        category: 'cat4',
-                        price: 8.99,
-                        stock: 25,
-                        description: 'Freshly baked whole wheat brown bread. High in fiber and perfect for breakfast.',
-                        sku: 'BRD-001',
-                        weight: 0.5,
-                        discount: 10,
-                        featured: 'yes',
-                        images: ['https://images.unsplash.com/photo-1608190003443-86ab6a3e21a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
-                    },
-                    {
-                        id: 'P005',
-                        name: 'Fresh Apples (1kg)',
-                        category: 'cat1',
-                        price: 15.99,
-                        stock: 30,
-                        description: 'Crisp and juicy apples, perfect for snacking or baking. Imported from South Africa.',
-                        sku: 'APL-001',
-                        weight: 1.0,
-                        discount: 0,
-                        featured: 'yes',
-                        images: ['https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
-                    }
-                ];
-                displayFeaturedProducts();
-                displaySpecialProducts();
+            try {
+                const adminProducts = JSON.parse(localStorage.getItem('kavency_products'));
+                if (adminProducts && adminProducts.length > 0) {
+                    products = adminProducts;
+                    displayFeaturedProducts();
+                    displaySpecialProducts();
+                } else {
+                    // Default products if none in admin
+                    loadDefaultProducts();
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+                loadDefaultProducts();
             }
+        }
+
+        function loadDefaultProducts() {
+            products = [
+                {
+                    id: 'P001',
+                    name: 'Fresh Tomatoes (1kg)',
+                    category: 'cat1',
+                    price: 12.99,
+                    stock: 45,
+                    description: 'Locally grown, ripe tomatoes from Zambian farms. Perfect for salads, sauces, and cooking.',
+                    sku: 'TOM-001',
+                    weight: 1.0,
+                    discount: 0,
+                    featured: 'yes',
+                    images: ['https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
+                },
+                {
+                    id: 'P002',
+                    name: 'Chicken Breasts (1kg)',
+                    category: 'cat2',
+                    price: 45.99,
+                    stock: 22,
+                    description: 'Premium skinless, boneless chicken breasts. Fresh and tender, perfect for grilling or baking.',
+                    sku: 'CHK-001',
+                    weight: 1.0,
+                    discount: 0,
+                    featured: 'yes',
+                    images: ['https://images.unsplash.com/photo-1621996346565-e3dbc353d2a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
+                },
+                {
+                    id: 'P003',
+                    name: 'Fresh Milk (2L)',
+                    category: 'cat3',
+                    price: 18.50,
+                    stock: 3,
+                    description: 'Full cream pasteurized milk. Rich in calcium and vitamins, perfect for your daily needs.',
+                    sku: 'MLK-001',
+                    weight: 2.0,
+                    discount: 0,
+                    featured: 'no',
+                    images: ['https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
+                },
+                {
+                    id: 'P004',
+                    name: 'Brown Bread',
+                    category: 'cat4',
+                    price: 8.99,
+                    stock: 25,
+                    description: 'Freshly baked whole wheat brown bread. High in fiber and perfect for breakfast.',
+                    sku: 'BRD-001',
+                    weight: 0.5,
+                    discount: 10,
+                    featured: 'yes',
+                    images: ['https://images.unsplash.com/photo-1608190003443-86ab6a3e21a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
+                },
+                {
+                    id: 'P005',
+                    name: 'Fresh Apples (1kg)',
+                    category: 'cat1',
+                    price: 15.99,
+                    stock: 30,
+                    description: 'Crisp and juicy apples, perfect for snacking or baking. Imported from South Africa.',
+                    sku: 'APL-001',
+                    weight: 1.0,
+                    discount: 0,
+                    featured: 'yes',
+                    images: ['https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
+                }
+            ];
+            displayFeaturedProducts();
+            displaySpecialProducts();
         }
 
         function loadCategoriesFromAdmin() {
-            const adminCategories = JSON.parse(localStorage.getItem('kavency_categories'));
-            if (adminCategories && adminCategories.length > 0) {
-                categories = adminCategories;
-                displayCategories();
-            } else {
-                // Default categories
-                categories = [
-                    { id: 'cat1', name: 'Fresh Produce', description: 'Fruits, vegetables, herbs & more', productCount: 156 },
-                    { id: 'cat2', name: 'Meat & Seafood', description: 'Quality cuts, poultry & fresh fish', productCount: 89 },
-                    { id: 'cat3', name: 'Dairy & Eggs', description: 'Milk, cheese, yogurt & fresh eggs', productCount: 67 },
-                    { id: 'cat4', name: 'Bakery', description: 'Fresh bread, cakes & pastries', productCount: 45 },
-                    { id: 'cat5', name: 'Beverages', description: 'Soft drinks, juices & water', productCount: 112 },
-                    { id: 'cat6', name: 'Household', description: 'Cleaning and household items', productCount: 203 }
-                ];
-                displayCategories();
+            try {
+                const adminCategories = JSON.parse(localStorage.getItem('kavency_categories'));
+                if (adminCategories && adminCategories.length > 0) {
+                    categories = adminCategories;
+                    displayCategories();
+                } else {
+                    loadDefaultCategories();
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                loadDefaultCategories();
             }
         }
 
+        function loadDefaultCategories() {
+            categories = [
+                { id: 'cat1', name: 'Fresh Produce', description: 'Fruits, vegetables, herbs & more', productCount: 156 },
+                { id: 'cat2', name: 'Meat & Seafood', description: 'Quality cuts, poultry & fresh fish', productCount: 89 },
+                { id: 'cat3', name: 'Dairy & Eggs', description: 'Milk, cheese, yogurt & fresh eggs', productCount: 67 },
+                { id: 'cat4', name: 'Bakery', description: 'Fresh bread, cakes & pastries', productCount: 45 },
+                { id: 'cat5', name: 'Beverages', description: 'Soft drinks, juices & water', productCount: 112 },
+                { id: 'cat6', name: 'Household', description: 'Cleaning and household items', productCount: 203 }
+            ];
+            displayCategories();
+        }
+
         function checkForUpdates() {
-            const lastUpdate = localStorage.getItem('kavency_store_updated');
-            if (lastUpdate) {
-                // Reload products if admin has updated them
-                const now = new Date();
-                const updateTime = new Date(lastUpdate);
-                const diffMinutes = (now - updateTime) / (1000 * 60);
-                
-                if (diffMinutes < 5) { // If updated in last 5 minutes
-                    loadProductsFromAdmin();
-                    loadCategoriesFromAdmin();
-                    localStorage.removeItem('kavency_store_updated');
+            try {
+                const lastUpdate = localStorage.getItem('kavency_store_updated');
+                if (lastUpdate) {
+                    // Reload products if admin has updated them
+                    const now = new Date();
+                    const updateTime = new Date(lastUpdate);
+                    const diffMinutes = (now - updateTime) / (1000 * 60);
+                    
+                    if (diffMinutes < 5) { // If updated in last 5 minutes
+                        loadProductsFromAdmin();
+                        loadCategoriesFromAdmin();
+                        localStorage.removeItem('kavency_store_updated');
+                    }
                 }
+            } catch (error) {
+                console.error('Error checking for updates:', error);
             }
         }
 
         // ==================== NAVIGATION FUNCTIONS ====================
         function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('section').forEach(section => {
-                section.style.display = 'none';
-            });
-            
-            // Update navigation
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId + 'Section').style.display = 'block';
-            
-            // Add active class to navigation link
-            const navLink = document.querySelector(`.nav-link[onclick*="${sectionId}"]`);
-            if (navLink) {
-                navLink.classList.add('active');
-            }
-            
-            // Update current section
-            currentSection = sectionId;
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            // Close mobile menu
-            document.getElementById('navLinks').classList.remove('active');
-            
-            // Load section-specific content
-            switch(sectionId) {
-                case 'shop':
-                    loadShopProducts();
-                    break;
-                case 'categories':
-                    displayCategories();
-                    break;
-                case 'specials':
-                    displaySpecialProducts();
-                    break;
+            try {
+                // Hide all sections
+                const sections = ['home', 'shop', 'categories', 'specials', 'about'];
+                sections.forEach(id => {
+                    const section = document.getElementById(id + 'Section');
+                    if (section) section.style.display = 'none';
+                });
+                
+                // Update navigation
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // Show selected section
+                const targetSection = document.getElementById(sectionId + 'Section');
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                }
+                
+                // Add active class to navigation link
+                const navLink = document.querySelector(`.nav-link[onclick*="${sectionId}"]`);
+                if (navLink) {
+                    navLink.classList.add('active');
+                }
+                
+                // Update current section
+                currentSection = sectionId;
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Close mobile menu
+                const navLinks = document.getElementById('navLinks');
+                if (navLinks) navLinks.classList.remove('active');
+                
+                // Load section-specific content
+                switch(sectionId) {
+                    case 'shop':
+                        loadShopProducts();
+                        break;
+                    case 'categories':
+                        displayCategories();
+                        break;
+                    case 'specials':
+                        displaySpecialProducts();
+                        break;
+                }
+            } catch (error) {
+                console.error('Error showing section:', error);
             }
         }
 
         function toggleMobileMenu() {
-            document.getElementById('navLinks').classList.toggle('active');
+            const navLinks = document.getElementById('navLinks');
+            if (navLinks) {
+                navLinks.classList.toggle('active');
+            }
         }
 
         // ==================== PRODUCT DISPLAY FUNCTIONS ====================
         function displayFeaturedProducts() {
-            const featuredProducts = products.filter(p => p.featured === 'yes');
-            const grid = document.getElementById('productsGrid');
-            
-            if (currentSection === 'shop') {
-                loadShopProducts();
-                return;
-            }
-            
-            grid.innerHTML = '';
-            productsDisplayed = Math.min(featuredProducts.length, productsPerPage);
-            
-            featuredProducts.slice(0, productsPerPage).forEach(product => {
-                const category = categories.find(c => c.id === product.category) || { name: 'Uncategorized' };
-                const discountedPrice = product.discount > 0 ? product.price * (1 - product.discount / 100) : null;
+            try {
+                const featuredProducts = products.filter(p => p.featured === 'yes');
+                const grid = document.getElementById('productsGrid');
                 
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.innerHTML = `
-                    ${product.discount > 0 ? `<div class="product-badge">-${product.discount}%</div>` : ''}
-                    <div class="product-image" style="background-image: url('${product.images[0]}');">
-                        <div class="product-overlay">
-                            <button class="quick-view-btn" onclick="quickView('${product.id}')">
-                                <i class="fas fa-eye"></i> Quick View
-                            </button>
-                        </div>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-category">${category.name}</div>
-                        <h3 class="product-name">${product.name}</h3>
-                        <p class="product-description">${product.description.substring(0, 60)}...</p>
-                        <div class="product-price">
-                            <div>
-                                <span class="price-current">K${discountedPrice ? discountedPrice.toFixed(2) : product.price.toFixed(2)}</span>
-                                ${discountedPrice ? `<span class="price-old">K${product.price.toFixed(2)}</span>` : ''}
+                if (!grid) return;
+                
+                if (currentSection === 'shop') {
+                    loadShopProducts();
+                    return;
+                }
+                
+                grid.innerHTML = '';
+                productsDisplayed = Math.min(featuredProducts.length, productsPerPage);
+                
+                featuredProducts.slice(0, productsPerPage).forEach(product => {
+                    const category = categories.find(c => c.id === product.category) || { name: 'Uncategorized' };
+                    const discountedPrice = product.discount > 0 ? product.price * (1 - product.discount / 100) : null;
+                    
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        ${product.discount > 0 ? `<div class="product-badge">-${product.discount}%</div>` : ''}
+                        <div class="product-image" style="background-image: url('${product.images[0]}');">
+                            <div class="product-overlay">
+                                <button class="quick-view-btn" onclick="quickView('${product.id}')">
+                                    <i class="fas fa-eye"></i> Quick View
+                                </button>
                             </div>
-                            <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
-                                <i class="fas fa-plus"></i>
-                            </button>
                         </div>
-                    </div>
-                `;
-                grid.appendChild(productCard);
-            });
+                        <div class="product-content">
+                            <div class="product-category">${category.name}</div>
+                            <h3 class="product-name">${product.name}</h3>
+                            <p class="product-description">${product.description ? product.description.substring(0, 60) + '...' : ''}</p>
+                            <div class="product-price">
+                                <div>
+                                    <span class="price-current">K${discountedPrice ? discountedPrice.toFixed(2) : product.price.toFixed(2)}</span>
+                                    ${discountedPrice ? `<span class="price-old">K${product.price.toFixed(2)}</span>` : ''}
+                                </div>
+                                <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(productCard);
+                });
+            } catch (error) {
+                console.error('Error displaying featured products:', error);
+            }
         }
 
         function displaySpecialProducts() {
-            const specialProducts = products.filter(p => p.discount > 0);
-            const grid = document.getElementById('specialsGrid');
-            
-            grid.innerHTML = '';
-            
-            specialProducts.forEach(product => {
-                const category = categories.find(c => c.id === product.category) || { name: 'Uncategorized' };
-                const discountedPrice = product.price * (1 - product.discount / 100);
+            try {
+                const specialProducts = products.filter(p => p.discount > 0);
+                const grid = document.getElementById('specialsGrid');
                 
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.innerHTML = `
-                    <div class="product-badge">-${product.discount}%</div>
-                    <div class="product-image" style="background-image: url('${product.images[0]}');">
-                        <div class="product-overlay">
-                            <button class="quick-view-btn" onclick="quickView('${product.id}')">
-                                <i class="fas fa-eye"></i> Quick View
-                            </button>
-                        </div>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-category">${category.name}</div>
-                        <h3 class="product-name">${product.name}</h3>
-                        <p class="product-description">${product.description.substring(0, 60)}...</p>
-                        <div class="product-price">
-                            <div>
-                                <span class="price-current">K${discountedPrice.toFixed(2)}</span>
-                                <span class="price-old">K${product.price.toFixed(2)}</span>
+                if (!grid) return;
+                
+                grid.innerHTML = '';
+                
+                specialProducts.forEach(product => {
+                    const category = categories.find(c => c.id === product.category) || { name: 'Uncategorized' };
+                    const discountedPrice = product.price * (1 - product.discount / 100);
+                    
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <div class="product-badge">-${product.discount}%</div>
+                        <div class="product-image" style="background-image: url('${product.images[0]}');">
+                            <div class="product-overlay">
+                                <button class="quick-view-btn" onclick="quickView('${product.id}')">
+                                    <i class="fas fa-eye"></i> Quick View
+                                </button>
                             </div>
-                            <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
-                                <i class="fas fa-plus"></i>
-                            </button>
                         </div>
-                    </div>
-                `;
-                grid.appendChild(productCard);
-            });
+                        <div class="product-content">
+                            <div class="product-category">${category.name}</div>
+                            <h3 class="product-name">${product.name}</h3>
+                            <p class="product-description">${product.description ? product.description.substring(0, 60) + '...' : ''}</p>
+                            <div class="product-price">
+                                <div>
+                                    <span class="price-current">K${discountedPrice.toFixed(2)}</span>
+                                    <span class="price-old">K${product.price.toFixed(2)}</span>
+                                </div>
+                                <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(productCard);
+                });
+            } catch (error) {
+                console.error('Error displaying special products:', error);
+            }
         }
 
         function displayCategories() {
-            const grid = document.getElementById('categoriesGrid');
-            grid.innerHTML = '';
-            
-            categories.forEach(category => {
-                const categoryCard = document.createElement('a');
-                categoryCard.className = 'category-card';
-                categoryCard.href = '#';
-                categoryCard.onclick = function(e) {
-                    e.preventDefault();
-                    showSection('shop');
-                    document.getElementById('categoryFilter').value = category.id;
-                    filterProducts();
-                };
+            try {
+                const grid = document.getElementById('categoriesGrid');
+                if (!grid) return;
                 
-                // Set different background images for different categories
-                let imageUrl = '';
-                switch(category.id) {
-                    case 'cat1': imageUrl = 'https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'; break;
-                    case 'cat2': imageUrl = 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'; break;
-                    case 'cat3': imageUrl = 'https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'; break;
-                    case 'cat4': imageUrl = 'https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'; break;
-                    default: imageUrl = 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
-                }
+                grid.innerHTML = '';
                 
-                categoryCard.innerHTML = `
-                    <div class="category-image" style="background-image: url('${imageUrl}');"></div>
-                    <div class="category-content">
-                        <h3 class="category-name">${category.name}</h3>
-                        <p class="category-count">${category.productCount} products</p>
-                    </div>
-                `;
-                grid.appendChild(categoryCard);
-            });
+                categories.forEach(category => {
+                    const categoryCard = document.createElement('a');
+                    categoryCard.className = 'category-card';
+                    categoryCard.href = '#';
+                    categoryCard.onclick = function(e) {
+                        e.preventDefault();
+                        showSection('shop');
+                        const categoryFilter = document.getElementById('categoryFilter');
+                        if (categoryFilter) categoryFilter.value = category.id;
+                        filterProducts();
+                    };
+                    
+                    // Set different background images for different categories
+                    let imageUrl = '';
+                    switch(category.id) {
+                        case 'cat1': imageUrl = 'https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'; break;
+                        case 'cat2': imageUrl = 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'; break;
+                        case 'cat3': imageUrl = 'https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'; break;
+                        case 'cat4': imageUrl = 'https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'; break;
+                        default: imageUrl = 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
+                    }
+                    
+                    categoryCard.innerHTML = `
+                        <div class="category-image" style="background-image: url('${imageUrl}');"></div>
+                        <div class="category-content">
+                            <h3 class="category-name">${category.name}</h3>
+                            <p class="category-count">${category.productCount} products</p>
+                        </div>
+                    `;
+                    grid.appendChild(categoryCard);
+                });
+            } catch (error) {
+                console.error('Error displaying categories:', error);
+            }
         }
 
         function loadShopProducts() {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = '';
-            
-            // Get filter values
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            const sortFilter = document.getElementById('sortFilter').value;
-            
-            // Filter products
-            let filteredProducts = products;
-            if (categoryFilter) {
-                filteredProducts = filteredProducts.filter(p => p.category === categoryFilter);
-            }
-            
-            // Sort products
-            switch(sortFilter) {
-                case 'price-low':
-                    filteredProducts.sort((a, b) => {
-                        const priceA = a.discount > 0 ? a.price * (1 - a.discount / 100) : a.price;
-                        const priceB = b.discount > 0 ? b.price * (1 - b.discount / 100) : b.price;
-                        return priceA - priceB;
-                    });
-                    break;
-                case 'price-high':
-                    filteredProducts.sort((a, b) => {
-                        const priceA = a.discount > 0 ? a.price * (1 - a.discount / 100) : a.price;
-                        const priceB = b.discount > 0 ? b.price * (1 - b.discount / 100) : b.price;
-                        return priceB - priceA;
-                    });
-                    break;
-                case 'name':
-                    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-                    break;
-                case 'featured':
-                default:
-                    filteredProducts.sort((a, b) => (b.featured === 'yes') - (a.featured === 'yes'));
-                    break;
-            }
-            
-            // Display products
-            productsDisplayed = Math.min(filteredProducts.length, productsPerPage);
-            
-            filteredProducts.slice(0, productsDisplayed).forEach(product => {
-                const category = categories.find(c => c.id === product.category) || { name: 'Uncategorized' };
-                const discountedPrice = product.discount > 0 ? product.price * (1 - product.discount / 100) : null;
+            try {
+                const grid = document.getElementById('productsGrid');
+                if (!grid) return;
                 
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.innerHTML = `
-                    ${product.discount > 0 ? `<div class="product-badge">-${product.discount}%</div>` : ''}
-                    <div class="product-image" style="background-image: url('${product.images[0]}');">
-                        <div class="product-overlay">
-                            <button class="quick-view-btn" onclick="quickView('${product.id}')">
-                                <i class="fas fa-eye"></i> Quick View
-                            </button>
-                        </div>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-category">${category.name}</div>
-                        <h3 class="product-name">${product.name}</h3>
-                        <p class="product-description">${product.description.substring(0, 60)}...</p>
-                        <div class="product-price">
-                            <div>
-                                <span class="price-current">K${discountedPrice ? discountedPrice.toFixed(2) : product.price.toFixed(2)}</span>
-                                ${discountedPrice ? `<span class="price-old">K${product.price.toFixed(2)}</span>` : ''}
+                grid.innerHTML = '';
+                
+                // Get filter values
+                const categoryFilter = document.getElementById('categoryFilter');
+                const sortFilter = document.getElementById('sortFilter');
+                
+                let categoryValue = '';
+                let sortValue = 'featured';
+                
+                if (categoryFilter) categoryValue = categoryFilter.value;
+                if (sortFilter) sortValue = sortFilter.value;
+                
+                // Filter products
+                let filteredProducts = products;
+                if (categoryValue) {
+                    filteredProducts = filteredProducts.filter(p => p.category === categoryValue);
+                }
+                
+                // Sort products
+                switch(sortValue) {
+                    case 'price-low':
+                        filteredProducts.sort((a, b) => {
+                            const priceA = a.discount > 0 ? a.price * (1 - a.discount / 100) : a.price;
+                            const priceB = b.discount > 0 ? b.price * (1 - b.discount / 100) : b.price;
+                            return priceA - priceB;
+                        });
+                        break;
+                    case 'price-high':
+                        filteredProducts.sort((a, b) => {
+                            const priceA = a.discount > 0 ? a.price * (1 - a.discount / 100) : a.price;
+                            const priceB = b.discount > 0 ? b.price * (1 - b.discount / 100) : b.price;
+                            return priceB - priceA;
+                        });
+                        break;
+                    case 'name':
+                        filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                        break;
+                    case 'featured':
+                    default:
+                        filteredProducts.sort((a, b) => (b.featured === 'yes') - (a.featured === 'yes'));
+                        break;
+                }
+                
+                // Display products
+                productsDisplayed = Math.min(filteredProducts.length, productsPerPage);
+                
+                filteredProducts.slice(0, productsDisplayed).forEach(product => {
+                    const category = categories.find(c => c.id === product.category) || { name: 'Uncategorized' };
+                    const discountedPrice = product.discount > 0 ? product.price * (1 - product.discount / 100) : null;
+                    
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        ${product.discount > 0 ? `<div class="product-badge">-${product.discount}%</div>` : ''}
+                        <div class="product-image" style="background-image: url('${product.images[0]}');">
+                            <div class="product-overlay">
+                                <button class="quick-view-btn" onclick="quickView('${product.id}')">
+                                    <i class="fas fa-eye"></i> Quick View
+                                </button>
                             </div>
-                            <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
-                                <i class="fas fa-plus"></i>
-                            </button>
                         </div>
-                    </div>
-                `;
-                grid.appendChild(productCard);
-            });
-            
-            // Show/hide load more button
-            const loadMoreBtn = grid.nextElementSibling.querySelector('button');
-            if (filteredProducts.length <= productsDisplayed) {
-                loadMoreBtn.style.display = 'none';
-            } else {
-                loadMoreBtn.style.display = 'inline-block';
+                        <div class="product-content">
+                            <div class="product-category">${category.name}</div>
+                            <h3 class="product-name">${product.name}</h3>
+                            <p class="product-description">${product.description ? product.description.substring(0, 60) + '...' : ''}</p>
+                            <div class="product-price">
+                                <div>
+                                    <span class="price-current">K${discountedPrice ? discountedPrice.toFixed(2) : product.price.toFixed(2)}</span>
+                                    ${discountedPrice ? `<span class="price-old">K${product.price.toFixed(2)}</span>` : ''}
+                                </div>
+                                <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(productCard);
+                });
+                
+                // Show/hide load more button
+                const loadMoreBtn = grid.nextElementSibling ? grid.nextElementSibling.querySelector('button') : null;
+                if (loadMoreBtn) {
+                    if (filteredProducts.length <= productsDisplayed) {
+                        loadMoreBtn.style.display = 'none';
+                    } else {
+                        loadMoreBtn.style.display = 'inline-block';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading shop products:', error);
             }
         }
 
@@ -2028,419 +2094,557 @@
         }
 
         function loadMoreProducts() {
-            const grid = document.getElementById('productsGrid');
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            let filteredProducts = products;
-            
-            if (categoryFilter) {
-                filteredProducts = filteredProducts.filter(p => p.category === categoryFilter);
-            }
-            
-            const nextProducts = filteredProducts.slice(productsDisplayed, productsDisplayed + productsPerPage);
-            
-            nextProducts.forEach(product => {
-                const category = categories.find(c => c.id === product.category) || { name: 'Uncategorized' };
-                const discountedPrice = product.discount > 0 ? product.price * (1 - product.discount / 100) : null;
+            try {
+                const grid = document.getElementById('productsGrid');
+                if (!grid) return;
                 
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.innerHTML = `
-                    ${product.discount > 0 ? `<div class="product-badge">-${product.discount}%</div>` : ''}
-                    <div class="product-image" style="background-image: url('${product.images[0]}');">
-                        <div class="product-overlay">
-                            <button class="quick-view-btn" onclick="quickView('${product.id}')">
-                                <i class="fas fa-eye"></i> Quick View
-                            </button>
-                        </div>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-category">${category.name}</div>
-                        <h3 class="product-name">${product.name}</h3>
-                        <p class="product-description">${product.description.substring(0, 60)}...</p>
-                        <div class="product-price">
-                            <div>
-                                <span class="price-current">K${discountedPrice ? discountedPrice.toFixed(2) : product.price.toFixed(2)}</span>
-                                ${discountedPrice ? `<span class="price-old">K${product.price.toFixed(2)}</span>` : ''}
+                const categoryFilter = document.getElementById('categoryFilter');
+                let categoryValue = '';
+                if (categoryFilter) categoryValue = categoryFilter.value;
+                
+                let filteredProducts = products;
+                if (categoryValue) {
+                    filteredProducts = filteredProducts.filter(p => p.category === categoryValue);
+                }
+                
+                const nextProducts = filteredProducts.slice(productsDisplayed, productsDisplayed + productsPerPage);
+                
+                nextProducts.forEach(product => {
+                    const category = categories.find(c => c.id === product.category) || { name: 'Uncategorized' };
+                    const discountedPrice = product.discount > 0 ? product.price * (1 - product.discount / 100) : null;
+                    
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        ${product.discount > 0 ? `<div class="product-badge">-${product.discount}%</div>` : ''}
+                        <div class="product-image" style="background-image: url('${product.images[0]}');">
+                            <div class="product-overlay">
+                                <button class="quick-view-btn" onclick="quickView('${product.id}')">
+                                    <i class="fas fa-eye"></i> Quick View
+                                </button>
                             </div>
-                            <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
-                                <i class="fas fa-plus"></i>
-                            </button>
                         </div>
-                    </div>
-                `;
-                grid.appendChild(productCard);
-            });
-            
-            productsDisplayed += nextProducts.length;
-            
-            if (productsDisplayed >= filteredProducts.length) {
-                const loadMoreBtn = grid.nextElementSibling.querySelector('button');
-                loadMoreBtn.style.display = 'none';
+                        <div class="product-content">
+                            <div class="product-category">${category.name}</div>
+                            <h3 class="product-name">${product.name}</h3>
+                            <p class="product-description">${product.description ? product.description.substring(0, 60) + '...' : ''}</p>
+                            <div class="product-price">
+                                <div>
+                                    <span class="price-current">K${discountedPrice ? discountedPrice.toFixed(2) : product.price.toFixed(2)}</span>
+                                    ${discountedPrice ? `<span class="price-old">K${product.price.toFixed(2)}</span>` : ''}
+                                </div>
+                                <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(productCard);
+                });
+                
+                productsDisplayed += nextProducts.length;
+                
+                if (productsDisplayed >= filteredProducts.length) {
+                    const loadMoreBtn = grid.nextElementSibling ? grid.nextElementSibling.querySelector('button') : null;
+                    if (loadMoreBtn) {
+                        loadMoreBtn.style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading more products:', error);
             }
         }
 
         function loadCategoryFilter() {
-            const filter = document.getElementById('categoryFilter');
-            filter.innerHTML = '<option value="">All Categories</option>';
-            
-            categories.forEach(category => {
-                filter.innerHTML += `<option value="${category.id}">${category.name}</option>`;
-            });
+            try {
+                const filter = document.getElementById('categoryFilter');
+                if (!filter) return;
+                
+                filter.innerHTML = '<option value="">All Categories</option>';
+                
+                categories.forEach(category => {
+                    filter.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+                });
+            } catch (error) {
+                console.error('Error loading category filter:', error);
+            }
         }
 
         // ==================== CART FUNCTIONS ====================
         function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-            
-            // Check if product is already in cart
-            const existingItem = cart.find(item => item.id === productId);
-            
-            if (existingItem) {
-                if (existingItem.quantity < product.stock) {
-                    existingItem.quantity++;
+            try {
+                const product = products.find(p => p.id === productId);
+                if (!product) return;
+                
+                // Check if product is already in cart
+                const existingItem = cart.find(item => item.id === productId);
+                
+                if (existingItem) {
+                    if (existingItem.quantity < product.stock) {
+                        existingItem.quantity++;
+                    } else {
+                        alert(`Sorry, only ${product.stock} items available in stock.`);
+                        return;
+                    }
                 } else {
-                    alert(`Sorry, only ${product.stock} items available in stock.`);
-                    return;
+                    if (product.stock > 0) {
+                        cart.push({
+                            id: product.id,
+                            name: product.name,
+                            price: product.discount > 0 ? product.price * (1 - product.discount / 100) : product.price,
+                            originalPrice: product.price,
+                            discount: product.discount,
+                            image: product.images[0],
+                            quantity: 1,
+                            maxStock: product.stock
+                        });
+                    } else {
+                        alert('Sorry, this product is out of stock.');
+                        return;
+                    }
                 }
-            } else {
-                if (product.stock > 0) {
-                    cart.push({
-                        id: product.id,
-                        name: product.name,
-                        price: product.discount > 0 ? product.price * (1 - product.discount / 100) : product.price,
-                        originalPrice: product.price,
-                        discount: product.discount,
-                        image: product.images[0],
-                        quantity: 1,
-                        maxStock: product.stock
-                    });
-                } else {
-                    alert('Sorry, this product is out of stock.');
-                    return;
+                
+                // Save cart to localStorage
+                localStorage.setItem('kavency_cart', JSON.stringify(cart));
+                
+                // Update cart count
+                updateCartCount();
+                
+                // Show success message
+                showNotification(`${product.name} added to cart!`, 'success');
+                
+                // If cart modal is open, update it
+                if (document.getElementById('cartModal').style.display === 'flex') {
+                    updateCartModal();
                 }
-            }
-            
-            // Save cart to localStorage
-            localStorage.setItem('kavency_cart', JSON.stringify(cart));
-            
-            // Update cart count
-            updateCartCount();
-            
-            // Show success message
-            showNotification(`${product.name} added to cart!`, 'success');
-            
-            // If cart modal is open, update it
-            if (document.getElementById('cartModal').style.display === 'flex') {
-                updateCartModal();
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                alert('Error adding product to cart. Please try again.');
             }
         }
 
         function updateCartCount() {
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.getElementById('cartCount').textContent = totalItems;
+            try {
+                const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+                const cartCountElement = document.getElementById('cartCount');
+                if (cartCountElement) {
+                    cartCountElement.textContent = totalItems;
+                }
+            } catch (error) {
+                console.error('Error updating cart count:', error);
+            }
         }
 
         function updateCartModal() {
-            const cartItemsDiv = document.getElementById('cartItems');
-            cartItemsDiv.innerHTML = '';
-            
-            if (cart.length === 0) {
-                cartItemsDiv.innerHTML = `
-                    <div style="text-align: center; padding: 40px 20px;">
-                        <i class="fas fa-shopping-cart" style="font-size: 60px; color: #ddd; margin-bottom: 20px;"></i>
-                        <h3 style="color: #666; margin-bottom: 10px;">Your cart is empty</h3>
-                        <p style="color: #999;">Add some products to get started</p>
-                    </div>
-                `;
-                document.getElementById('cartSubtotal').textContent = 'K0.00';
-                document.getElementById('cartTotal').textContent = 'K15.00';
-                return;
-            }
-            
-            let subtotal = 0;
-            
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
+            try {
+                const cartItemsDiv = document.getElementById('cartItems');
+                if (!cartItemsDiv) return;
                 
-                const cartItem = document.createElement('div');
-                cartItem.className = 'cart-item';
-                cartItem.innerHTML = `
-                    <div class="cart-item-info">
-                        <div class="cart-item-image" style="background-image: url('${item.image}');"></div>
-                        <div class="cart-item-details">
-                            <div class="cart-item-name">${item.name}</div>
-                            <div class="cart-item-price">K${item.price.toFixed(2)} each</div>
+                cartItemsDiv.innerHTML = '';
+                
+                if (cart.length === 0) {
+                    cartItemsDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px 20px;">
+                            <i class="fas fa-shopping-cart" style="font-size: 60px; color: #ddd; margin-bottom: 20px;"></i>
+                            <h3 style="color: #666; margin-bottom: 10px;">Your cart is empty</h3>
+                            <p style="color: #999;">Add some products to get started</p>
                         </div>
-                    </div>
-                    <div class="cart-item-actions">
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity - 1})">
-                                <i class="fas fa-minus"></i>
+                    `;
+                    const subtotalElement = document.getElementById('cartSubtotal');
+                    const totalElement = document.getElementById('cartTotal');
+                    if (subtotalElement) subtotalElement.textContent = 'K0.00';
+                    if (totalElement) totalElement.textContent = 'K15.00';
+                    return;
+                }
+                
+                let subtotal = 0;
+                
+                cart.forEach((item, index) => {
+                    const itemTotal = (item.price || 0) * (item.quantity || 0);
+                    subtotal += itemTotal;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="cart-item-info">
+                            <div class="cart-item-image" style="background-image: url('${item.image || ''}');"></div>
+                            <div class="cart-item-details">
+                                <div class="cart-item-name">${item.name || 'Product'}</div>
+                                <div class="cart-item-price">K${(item.price || 0).toFixed(2)} each</div>
+                            </div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <div class="quantity-control">
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, ${(item.quantity || 1) - 1})">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="quantity">${item.quantity || 1}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, ${(item.quantity || 1) + 1})">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div style="min-width: 80px; text-align: right;">
+                                <strong>K${itemTotal.toFixed(2)}</strong>
+                            </div>
+                            <button class="remove-item" onclick="removeFromCart(${index})">
+                                <i class="fas fa-trash"></i>
                             </button>
-                            <span class="quantity">${item.quantity}</span>
-                            <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity + 1})">
-                                <i class="fas fa-plus"></i>
-                            </button>
                         </div>
-                        <div style="min-width: 80px; text-align: right;">
-                            <strong>K${itemTotal.toFixed(2)}</strong>
-                        </div>
-                        <button class="remove-item" onclick="removeFromCart(${index})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-                cartItemsDiv.appendChild(cartItem);
-            });
-            
-            const deliveryFee = 15.00;
-            const total = subtotal + deliveryFee;
-            
-            document.getElementById('cartSubtotal').textContent = 'K' + subtotal.toFixed(2);
-            document.getElementById('cartTotal').textContent = 'K' + total.toFixed(2);
+                    `;
+                    cartItemsDiv.appendChild(cartItem);
+                });
+                
+                const deliveryFee = 15.00;
+                const total = subtotal + deliveryFee;
+                
+                const subtotalElement = document.getElementById('cartSubtotal');
+                const totalElement = document.getElementById('cartTotal');
+                
+                if (subtotalElement) subtotalElement.textContent = 'K' + subtotal.toFixed(2);
+                if (totalElement) totalElement.textContent = 'K' + total.toFixed(2);
+            } catch (error) {
+                console.error('Error updating cart modal:', error);
+            }
         }
 
         function updateQuantity(index, newQuantity) {
-            if (newQuantity < 1) {
-                removeFromCart(index);
-                return;
+            try {
+                if (newQuantity < 1) {
+                    removeFromCart(index);
+                    return;
+                }
+                
+                const item = cart[index];
+                if (!item) return;
+                
+                if (newQuantity > (item.maxStock || 99)) {
+                    alert(`Sorry, only ${item.maxStock || 99} items available in stock.`);
+                    return;
+                }
+                
+                cart[index].quantity = newQuantity;
+                localStorage.setItem('kavency_cart', JSON.stringify(cart));
+                updateCartCount();
+                updateCartModal();
+            } catch (error) {
+                console.error('Error updating quantity:', error);
             }
-            
-            const item = cart[index];
-            if (newQuantity > item.maxStock) {
-                alert(`Sorry, only ${item.maxStock} items available in stock.`);
-                return;
-            }
-            
-            cart[index].quantity = newQuantity;
-            localStorage.setItem('kavency_cart', JSON.stringify(cart));
-            updateCartCount();
-            updateCartModal();
         }
 
         function removeFromCart(index) {
-            cart.splice(index, 1);
-            localStorage.setItem('kavency_cart', JSON.stringify(cart));
-            updateCartCount();
-            updateCartModal();
+            try {
+                cart.splice(index, 1);
+                localStorage.setItem('kavency_cart', JSON.stringify(cart));
+                updateCartCount();
+                updateCartModal();
+            } catch (error) {
+                console.error('Error removing from cart:', error);
+            }
         }
 
         function clearCart() {
-            cart = [];
-            localStorage.setItem('kavency_cart', JSON.stringify(cart));
-            updateCartCount();
-            updateCartModal();
+            try {
+                cart = [];
+                localStorage.setItem('kavency_cart', JSON.stringify(cart));
+                updateCartCount();
+                updateCartModal();
+            } catch (error) {
+                console.error('Error clearing cart:', error);
+            }
         }
 
         // ==================== MODAL FUNCTIONS ====================
         function openCartModal() {
-            updateCartModal();
-            document.getElementById('cartModal').style.display = 'flex';
+            try {
+                updateCartModal();
+                const modal = document.getElementById('cartModal');
+                if (modal) modal.style.display = 'flex';
+            } catch (error) {
+                console.error('Error opening cart modal:', error);
+            }
         }
 
         function closeCartModal() {
-            document.getElementById('cartModal').style.display = 'none';
+            try {
+                const modal = document.getElementById('cartModal');
+                if (modal) modal.style.display = 'none';
+            } catch (error) {
+                console.error('Error closing cart modal:', error);
+            }
         }
 
         function openCheckoutModal() {
-            if (cart.length === 0) {
-                alert('Your cart is empty. Add some products first.');
-                return;
+            try {
+                if (cart.length === 0) {
+                    alert('Your cart is empty. Add some products first.');
+                    return;
+                }
+                
+                // Pre-fill user info if available
+                if (user) {
+                    const nameInput = document.getElementById('checkoutName');
+                    const phoneInput = document.getElementById('checkoutPhone');
+                    if (nameInput) nameInput.value = user.name || '';
+                    if (phoneInput) phoneInput.value = user.phone || '';
+                }
+                
+                // Update checkout summary
+                updateCheckoutSummary();
+                
+                closeCartModal();
+                const modal = document.getElementById('checkoutModal');
+                if (modal) modal.style.display = 'flex';
+            } catch (error) {
+                console.error('Error opening checkout modal:', error);
             }
-            
-            // Pre-fill user info if available
-            if (user) {
-                document.getElementById('checkoutName').value = user.name || '';
-                document.getElementById('checkoutPhone').value = user.phone || '';
-            }
-            
-            // Update checkout summary
-            updateCheckoutSummary();
-            
-            document.getElementById('cartModal').style.display = 'none';
-            document.getElementById('checkoutModal').style.display = 'flex';
         }
 
         function closeCheckoutModal() {
-            document.getElementById('checkoutModal').style.display = 'none';
+            try {
+                const modal = document.getElementById('checkoutModal');
+                if (modal) modal.style.display = 'none';
+            } catch (error) {
+                console.error('Error closing checkout modal:', error);
+            }
         }
 
         function openLoginModal() {
-            document.getElementById('loginModal').style.display = 'flex';
+            try {
+                const modal = document.getElementById('loginModal');
+                if (modal) modal.style.display = 'flex';
+            } catch (error) {
+                console.error('Error opening login modal:', error);
+            }
         }
 
         function closeLoginModal() {
-            document.getElementById('loginModal').style.display = 'none';
+            try {
+                const modal = document.getElementById('loginModal');
+                if (modal) modal.style.display = 'none';
+            } catch (error) {
+                console.error('Error closing login modal:', error);
+            }
         }
 
         function closeSuccessModal() {
-            document.getElementById('successModal').style.display = 'none';
+            try {
+                const modal = document.getElementById('successModal');
+                if (modal) modal.style.display = 'none';
+            } catch (error) {
+                console.error('Error closing success modal:', error);
+            }
         }
 
         function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(tabEl => {
-                tabEl.classList.remove('active');
-            });
-            
-            event.target.classList.add('active');
-            
-            if (tab === 'login') {
-                document.getElementById('loginForm').style.display = 'block';
-                document.getElementById('registerForm').style.display = 'none';
-            } else {
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('registerForm').style.display = 'block';
+            try {
+                document.querySelectorAll('.auth-tab').forEach(tabEl => {
+                    tabEl.classList.remove('active');
+                });
+                
+                event.target.classList.add('active');
+                
+                const loginForm = document.getElementById('loginForm');
+                const registerForm = document.getElementById('registerForm');
+                
+                if (tab === 'login') {
+                    if (loginForm) loginForm.style.display = 'block';
+                    if (registerForm) registerForm.style.display = 'none';
+                } else {
+                    if (loginForm) loginForm.style.display = 'none';
+                    if (registerForm) registerForm.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error switching auth tab:', error);
             }
         }
 
         // ==================== CHECKOUT FUNCTIONS ====================
         function selectPayment(method) {
-            selectedPayment = method;
-            
-            // Update UI
-            document.querySelectorAll('.payment-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            event.target.closest('.payment-option').classList.add('selected');
-            
-            // Show instructions
-            const instructionsDiv = document.getElementById('paymentInstructions');
-            const instructionsText = document.getElementById('instructionsText');
-            instructionsDiv.style.display = 'block';
-            
-            let instructions = '';
-            switch(method) {
-                case 'mtn':
-                    instructions = 'Please send payment to MTN Mobile Money number 0961 234 567. Use your order ID as reference.';
-                    break;
-                case 'airtel':
-                    instructions = 'Please send payment to Airtel Money number 0977 123 456. Use your order ID as reference.';
-                    break;
-                case 'zamtel':
-                    instructions = 'Please send payment to Zamtel Kwacha number 0955 789 012. Use your order ID as reference.';
-                    break;
-                case 'bank':
-                    instructions = 'Please transfer to Zanaco Account: 1234567890 (Kavency Super Market). Use your order ID as reference.';
-                    break;
+            try {
+                selectedPayment = method;
+                
+                // Update UI
+                document.querySelectorAll('.payment-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                const target = event.target.closest('.payment-option');
+                if (target) target.classList.add('selected');
+                
+                // Show instructions
+                const instructionsDiv = document.getElementById('paymentInstructions');
+                const instructionsText = document.getElementById('instructionsText');
+                
+                if (instructionsDiv) instructionsDiv.style.display = 'block';
+                if (!instructionsText) return;
+                
+                let instructions = '';
+                switch(method) {
+                    case 'mtn':
+                        instructions = 'Please send payment to MTN Mobile Money number 0961 234 567. Use your order ID as reference.';
+                        break;
+                    case 'airtel':
+                        instructions = 'Please send payment to Airtel Money number 0977 123 456. Use your order ID as reference.';
+                        break;
+                    case 'zamtel':
+                        instructions = 'Please send payment to Zamtel Kwacha number 0955 789 012. Use your order ID as reference.';
+                        break;
+                    case 'bank':
+                        instructions = 'Please transfer to Zanaco Account: 1234567890 (Kavency Super Market). Use your order ID as reference.';
+                        break;
+                }
+                
+                instructionsText.textContent = instructions;
+            } catch (error) {
+                console.error('Error selecting payment:', error);
             }
-            
-            instructionsText.textContent = instructions;
         }
 
         function updateCheckoutSummary() {
-            const summaryDiv = document.getElementById('checkoutSummary');
-            let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            let deliveryFee = 15.00;
-            let total = subtotal + deliveryFee;
-            
-            let summaryHTML = `
-                <div style="margin-bottom: 10px;">
-                    <strong>Items (${cart.length}):</strong> K${subtotal.toFixed(2)}
-                </div>
-            `;
-            
-            cart.forEach(item => {
-                summaryHTML += `
-                    <div style="font-size: 14px; color: #666; margin-bottom: 5px;">
-                        ${item.quantity} × ${item.name}
+            try {
+                const summaryDiv = document.getElementById('checkoutSummary');
+                if (!summaryDiv) return;
+                
+                let subtotal = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+                let deliveryFee = 15.00;
+                let total = subtotal + deliveryFee;
+                
+                let summaryHTML = `
+                    <div style="margin-bottom: 10px;">
+                        <strong>Items (${cart.length}):</strong> K${subtotal.toFixed(2)}
                     </div>
                 `;
-            });
-            
-            summaryHTML += `
-                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                        <span>Subtotal:</span>
-                        <span>K${subtotal.toFixed(2)}</span>
+                
+                cart.forEach(item => {
+                    summaryHTML += `
+                        <div style="font-size: 14px; color: #666; margin-bottom: 5px;">
+                            ${item.quantity || 1} × ${item.name || 'Product'}
+                        </div>
+                    `;
+                });
+                
+                summaryHTML += `
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Subtotal:</span>
+                            <span>K${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Delivery Fee:</span>
+                            <span>K${deliveryFee.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 18px; color: var(--primary);">
+                            <span>Total:</span>
+                            <span>K${total.toFixed(2)}</span>
+                        </div>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                        <span>Delivery Fee:</span>
-                        <span>K${deliveryFee.toFixed(2)}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 18px; color: var(--primary);">
-                        <span>Total:</span>
-                        <span>K${total.toFixed(2)}</span>
-                    </div>
-                </div>
-            `;
-            
-            summaryDiv.innerHTML = summaryHTML;
+                `;
+                
+                summaryDiv.innerHTML = summaryHTML;
+            } catch (error) {
+                console.error('Error updating checkout summary:', error);
+            }
         }
 
         function placeOrder() {
-            // Validate form
-            const name = document.getElementById('checkoutName').value.trim();
-            const phone = document.getElementById('checkoutPhone').value.trim();
-            const address = document.getElementById('checkoutAddress').value.trim();
-            const deliveryTime = document.getElementById('deliveryTime').value;
-            
-            if (!name || !phone || !address || !deliveryTime || !selectedPayment) {
-                alert('Please fill in all required fields and select a payment method.');
-                return;
+            try {
+                // Validate form
+                const nameInput = document.getElementById('checkoutName');
+                const phoneInput = document.getElementById('checkoutPhone');
+                const addressInput = document.getElementById('checkoutAddress');
+                const deliveryTimeSelect = document.getElementById('deliveryTime');
+                
+                if (!nameInput || !phoneInput || !addressInput || !deliveryTimeSelect) {
+                    alert('Form elements not found. Please refresh the page.');
+                    return;
+                }
+                
+                const name = nameInput.value.trim();
+                const phone = phoneInput.value.trim();
+                const address = addressInput.value.trim();
+                const deliveryTime = deliveryTimeSelect.value;
+                
+                if (!name || !phone || !address || !deliveryTime || !selectedPayment) {
+                    alert('Please fill in all required fields and select a payment method.');
+                    return;
+                }
+                
+                // Validate phone number
+                if (!/^\+?[\d\s-]{10,}$/.test(phone)) {
+                    alert('Please enter a valid phone number.');
+                    return;
+                }
+                
+                // Save user info
+                user = { name, phone, address };
+                localStorage.setItem('kavency_user', JSON.stringify(user));
+                
+                // Generate order ID
+                const orderId = 'ORD' + Date.now().toString().substr(-6);
+                
+                // Calculate totals
+                const subtotal = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+                const deliveryFee = 15.00;
+                const total = subtotal + deliveryFee;
+                
+                // Create order object
+                const order = {
+                    id: orderId,
+                    customer: name,
+                    phone: phone,
+                    address: address,
+                    date: new Date().toISOString().split('T')[0],
+                    deliveryTime: deliveryTime,
+                    amount: total,
+                    payment: getPaymentMethodName(selectedPayment),
+                    status: 'pending',
+                    items: cart.map(item => ({
+                        name: item.name,
+                        price: item.price,
+                        quantity: item.quantity
+                    }))
+                };
+                
+                // Save order to localStorage
+                const orders = JSON.parse(localStorage.getItem('kavency_orders')) || [];
+                orders.push(order);
+                localStorage.setItem('kavency_orders', JSON.stringify(orders));
+                
+                // Also save to admin orders
+                const adminOrders = JSON.parse(localStorage.getItem('kavency_admin_orders')) || [];
+                adminOrders.push(order);
+                localStorage.setItem('kavency_admin_orders', JSON.stringify(adminOrders));
+                
+                // Update the admin panel data
+                localStorage.setItem('kavency_store_updated', new Date().toISOString());
+                
+                // Show success modal
+                const orderIdDisplay = document.getElementById('orderIdDisplay');
+                const deliveryTimeDisplay = document.getElementById('deliveryTimeDisplay');
+                const orderTotalDisplay = document.getElementById('orderTotalDisplay');
+                const paymentMethodDisplay = document.getElementById('paymentMethodDisplay');
+                
+                if (orderIdDisplay) orderIdDisplay.textContent = orderId;
+                if (deliveryTimeDisplay) {
+                    const selectedOption = deliveryTimeSelect.options[deliveryTimeSelect.selectedIndex];
+                    deliveryTimeDisplay.textContent = selectedOption ? selectedOption.text : deliveryTime;
+                }
+                if (orderTotalDisplay) orderTotalDisplay.textContent = 'K' + total.toFixed(2);
+                if (paymentMethodDisplay) paymentMethodDisplay.textContent = getPaymentMethodName(selectedPayment);
+                
+                closeCheckoutModal();
+                const successModal = document.getElementById('successModal');
+                if (successModal) successModal.style.display = 'flex';
+                
+                // Clear cart
+                clearCart();
+                
+                // Show notification
+                showNotification('Order placed successfully!', 'success');
+            } catch (error) {
+                console.error('Error placing order:', error);
+                alert('Error placing order. Please try again.');
             }
-            
-            // Validate phone number
-            if (!/^\+?[\d\s-]{10,}$/.test(phone)) {
-                alert('Please enter a valid phone number.');
-                return;
-            }
-            
-            // Save user info
-            user = { name, phone, address };
-            localStorage.setItem('kavency_user', JSON.stringify(user));
-            
-            // Generate order ID
-            const orderId = 'ORD' + Date.now().toString().substr(-6);
-            
-            // Calculate totals
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const deliveryFee = 15.00;
-            const total = subtotal + deliveryFee;
-            
-            // Create order object
-            const order = {
-                id: orderId,
-                customer: name,
-                phone: phone,
-                address: address,
-                date: new Date().toISOString().split('T')[0],
-                deliveryTime: deliveryTime,
-                amount: total,
-                payment: getPaymentMethodName(selectedPayment),
-                status: 'pending',
-                items: cart.map(item => ({
-                    name: item.name,
-                    price: item.price,
-                    quantity: item.quantity
-                }))
-            };
-            
-            // Save order to localStorage (in a real app, this would be sent to a server)
-            const orders = JSON.parse(localStorage.getItem('kavency_orders')) || [];
-            orders.push(order);
-            localStorage.setItem('kavency_orders', JSON.stringify(orders));
-            
-            // Update admin panel's orders
-            const adminOrders = JSON.parse(localStorage.getItem('kavency_admin_orders')) || [];
-            adminOrders.push(order);
-            localStorage.setItem('kavency_admin_orders', JSON.stringify(adminOrders));
-            
-            // Show success modal
-            document.getElementById('orderIdDisplay').textContent = orderId;
-            document.getElementById('deliveryTimeDisplay').textContent = document.getElementById('deliveryTime').options[document.getElementById('deliveryTime').selectedIndex].text;
-            document.getElementById('orderTotalDisplay').textContent = 'K' + total.toFixed(2);
-            document.getElementById('paymentMethodDisplay').textContent = getPaymentMethodName(selectedPayment);
-            
-            document.getElementById('checkoutModal').style.display = 'none';
-            document.getElementById('successModal').style.display = 'flex';
-            
-            // Clear cart
-            clearCart();
-            
-            // Show notification
-            showNotification('Order placed successfully!', 'success');
         }
 
         function getPaymentMethodName(method) {
@@ -2459,132 +2663,181 @@
         }
 
         function continueShopping() {
-            // Close all modals
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.style.display = 'none';
-            });
-            
-            // Show shop section
-            showSection('shop');
+            try {
+                // Close all modals
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+                
+                // Show shop section
+                showSection('shop');
+            } catch (error) {
+                console.error('Error continuing shopping:', error);
+            }
         }
 
         // ==================== USER AUTHENTICATION ====================
         function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                alert('Please enter email and password');
-                return;
+            try {
+                const emailInput = document.getElementById('loginEmail');
+                const passwordInput = document.getElementById('loginPassword');
+                
+                if (!emailInput || !passwordInput) return;
+                
+                const email = emailInput.value;
+                const password = passwordInput.value;
+                
+                if (!email || !password) {
+                    alert('Please enter email and password');
+                    return;
+                }
+                
+                // In a real app, this would be an API call
+                showNotification('Login successful!', 'success');
+                closeLoginModal();
+            } catch (error) {
+                console.error('Error logging in:', error);
             }
-            
-            // In a real app, this would be an API call
-            // For demo purposes, we'll simulate a login
-            showNotification('Login successful!', 'success');
-            closeLoginModal();
         }
 
         function register() {
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const phone = document.getElementById('registerPhone').value;
-            const password = document.getElementById('registerPassword').value;
-            
-            if (!name || !email || !phone || !password) {
-                alert('Please fill in all fields');
-                return;
+            try {
+                const nameInput = document.getElementById('registerName');
+                const emailInput = document.getElementById('registerEmail');
+                const phoneInput = document.getElementById('registerPhone');
+                const passwordInput = document.getElementById('registerPassword');
+                
+                if (!nameInput || !emailInput || !phoneInput || !passwordInput) return;
+                
+                const name = nameInput.value;
+                const email = emailInput.value;
+                const phone = phoneInput.value;
+                const password = passwordInput.value;
+                
+                if (!name || !email || !phone || !password) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                // In a real app, this would be an API call
+                showNotification('Registration successful!', 'success');
+                closeLoginModal();
+            } catch (error) {
+                console.error('Error registering:', error);
             }
-            
-            // In a real app, this would be an API call
-            // For demo purposes, we'll simulate registration
-            showNotification('Registration successful!', 'success');
-            closeLoginModal();
         }
 
         // ==================== UTILITY FUNCTIONS ====================
         function quickView(productId) {
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                alert(`Quick View: ${product.name}\n\nPrice: K${product.price.toFixed(2)}\nDescription: ${product.description}\n\nClick "Add to Cart" to purchase.`);
+            try {
+                const product = products.find(p => p.id === productId);
+                if (product) {
+                    alert(`Quick View: ${product.name}\n\nPrice: K${product.price.toFixed(2)}\nDescription: ${product.description}\n\nClick "Add to Cart" to purchase.`);
+                }
+            } catch (error) {
+                console.error('Error in quick view:', error);
             }
         }
 
         function performSearch() {
-            const searchTerm = document.getElementById('searchInput').value.trim();
-            if (searchTerm) {
-                showSection('shop');
-                // In a real app, this would filter products by search term
-                alert(`Searching for: ${searchTerm}\n\nProducts would be filtered based on your search.`);
+            try {
+                const searchInput = document.getElementById('searchInput');
+                if (!searchInput) return;
+                
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    showSection('shop');
+                    alert(`Searching for: ${searchTerm}\n\nProducts would be filtered based on your search.`);
+                }
+            } catch (error) {
+                console.error('Error performing search:', error);
             }
         }
 
         function showNotification(message, type) {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background-color: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
-                color: white;
-                padding: 15px 25px;
-                border-radius: 8px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                z-index: 3000;
-                animation: slideIn 0.3s ease;
-            `;
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-            
-            // Remove notification after 3 seconds
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
+            try {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background-color: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 8px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                    z-index: 3000;
+                    animation: slideIn 0.3s ease;
+                `;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                // Remove notification after 3 seconds
                 setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                }, 3000);
+            } catch (error) {
+                console.error('Error showing notification:', error);
+            }
         }
 
         function setupEventListeners() {
-            // Close modals when clicking outside
-            document.addEventListener('click', function(event) {
-                if (event.target.classList.contains('modal')) {
-                    event.target.style.display = 'none';
-                }
-            });
-            
-            // Close modals with Escape key
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    document.querySelectorAll('.modal').forEach(modal => {
-                        modal.style.display = 'none';
+            try {
+                // Close modals when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (event.target.classList.contains('modal')) {
+                        event.target.style.display = 'none';
+                    }
+                });
+                
+                // Close modals with Escape key
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape') {
+                        document.querySelectorAll('.modal').forEach(modal => {
+                            modal.style.display = 'none';
+                        });
+                    }
+                });
+                
+                // Search on Enter key
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('keypress', function(event) {
+                        if (event.key === 'Enter') {
+                            performSearch();
+                        }
                     });
                 }
-            });
-            
-            // Search on Enter key
-            document.getElementById('searchInput').addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    performSearch();
-                }
-            });
+            } catch (error) {
+                console.error('Error setting up event listeners:', error);
+            }
         }
 
         // Add CSS for notification animations
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
+        try {
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        } catch (error) {
+            console.error('Error adding animation styles:', error);
+        }
     </script>
 </body>
 </html>
